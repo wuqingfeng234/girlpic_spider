@@ -1,33 +1,25 @@
 import os
+import sys
+
+import requests
+from lxml import etree
 import ssl
 import sys
 import time
-from threading import Thread
-from urllib import request
 
 from lxml import etree
 
-alltotalpage = 1
-# urltemplate="https://xchina.co/photos/kind-1/{}.html"
-urltemplate = "https://xchina.co/photos/keyword-%E5%B8%8C%E5%A8%81%E7%A4%BE.html"
-# urltemplate="https://xchina.co/photos/series-%E6%8E%A8%E5%A5%B3%E9%83%8E.html" #2页
-# urltemplate="https://xchina.co/photos/series-Fantasy%20Factory.html" #2页
+urltemplate = "https://xchina.co/photos/kind-1/{}.html"
+# urltemplate="https://xchina.co/photos/kind-2/{}.html" 171页
 headers = {
     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
     "Content-Type": "text/html;charset=UTF-8"}
-ssl._create_default_https_context = ssl._create_unverified_context
-httpproxy_handler = request.ProxyHandler(
-    {
-        "http": "http://127.0.0.1:7890",
-        "https": "https://127.0.0.1:7890"
-    },
-)
+
 proxy = {'http': 'http://127.0.0.1:7890', 'https': 'http://127.0.0.1:7890'}
 
-pdictemplate = "../xchina/{}/"
-# pdictemplate="/Users/dujingwei/Movies/folder/xchina/{}/"
+# pdictemplate = "../xchina/{}/"
+pdictemplate = "./xchina/{}/"
 # pdictemplate="/Volumes/ExtremePro/folder/xchina/{}/"
-openner = request.build_opener(httpproxy_handler)
 
 RETRYTIME = 0
 
@@ -35,16 +27,15 @@ RETRYTIME = 0
 def downloadpic(fname, furl):
     global RETRYTIME
     try:
-        request.ProxyHandler(proxy)
-        req = request.Request(furl, headers=headers)
-        res = openner.open(req)
+        RETRYTIME = 0
+        res = requests.get(furl, headers=headers, proxies=proxy, timeout=10)
         with open(fname, 'wb') as f:
-            f.write(res.read())
+            f.write(res.content)
         return furl
     except:
         if (RETRYTIME == 5):
             RETRYTIME = 0
-            return "no"
+            return "failed"
         RETRYTIME += 1
         time.sleep(20)
         downloadpic(fname, furl)
@@ -53,11 +44,8 @@ def downloadpic(fname, furl):
 def getpagehtml(pageurl):
     global RETRYTIME
     try:
-        request.ProxyHandler(proxy)
-
-        req = request.Request(pageurl, headers=headers)
-        resp = openner.open(req)
-        return resp.read()
+        resp = requests.get(pageurl, headers=headers, proxies=proxy, timeout=10)
+        return resp.text
     except:
         if (RETRYTIME == 3):
             RETRYTIME = 0
@@ -68,8 +56,27 @@ def getpagehtml(pageurl):
         getpagehtml(pageurl)
 
 
-def docrawler(pageindex, items):
+alltotalpage = 353
+currentpage = 1
+currentitem = 1
+
+for i in range(currentpage, alltotalpage + 1):
+    starturl = urltemplate.format(i)
+    resphtmltext = getpagehtml(starturl)
+    if (resphtmltext == "failed"):
+        print("请求超时")
+        sys.exit()
+    print('-------------------')
+    print(resphtmltext)
+    print('-------------------')
+    resphtml = etree.HTML(resphtmltext)
+    items = resphtml.xpath('//div[@class="item photo"]')
+    print(len(items))
+    itemindex = 1
     for item in items:
+        if (i == currentpage and itemindex < currentitem):
+            itemindex += 1
+            continue
         suburl = "https://xchina.co{}".format(item.xpath('a/@href')[0])
         platname = item.xpath('div[1]/div[1]/a/text()')[0]
         modelname = item.xpath('div[1]/div[2]/a/text()')
@@ -105,11 +112,10 @@ def docrawler(pageindex, items):
             videos = imgpagehtml.xpath('//video[@class="player"]/source/@src')
             if (len(videos) > 0):
                 videourl = videos[0]
-                videoname = "{}{}".format(
-                    subfolder, os.path.basename(videourl))
+                videoname = "{}{}".format(subfolder, os.path.basename(videourl))
                 downloadpic(videoname, videourl)
-                print("page:【{}/{}】_{}-{}下载完毕".format(pageindex, alltotalpage,
-                                                          title, videoname))
+                print("page:{}【{}/{}】_{}-{}下载完毕".format(i, itemindex, len(items),
+                                                            title, videoname))
             imgs = imgpagehtml.xpath('//div[@class="photos"]/a')
             if (len(imgs) == 0):
                 continue
@@ -120,35 +126,12 @@ def docrawler(pageindex, items):
                     str(imgindex).rjust(3, '0'), os.path.splitext(imgurl)[-1]))
                 if (not os.path.exists(imgname)):
                     downloadpic(imgname, imgurl)
-                print("page:【{}/{}】_第【{}/{}】页_总【{}/{}】-{}下载完毕".format(pageindex, alltotalpage,
-                                                                             j, int(totalpage), imgindex, piccount,
-                                                                             imgname))
+                print("page:【{}/{}】item:【{}/{}】_{}_第【{}/{}】页_总【{}/{}】-{}下载完毕".format(i, alltotalpage, itemindex,
+                                                                                            len(items),
+                                                                                            title, j, int(totalpage),
+                                                                                            imgindex, piccount,
+                                                                                            imgname))
                 imgindex += 1
-
-
-currentpage = 1
-currentitem = 9
-GroupNum = 2
-for i in range(currentpage, alltotalpage + 1):
-    if (i < currentpage):
-        continue
-    # starturl=urltemplate.format(i)
-    starturl = urltemplate
-    resphtmltext = getpagehtml(starturl)
-    if (resphtmltext == "failed"):
-        print("请求超时")
-        sys.exit()
-    resphtml = etree.HTML(resphtmltext)
-    items = resphtml.xpath('//div[@class="item"]')
-    # 创建多线程
-    t_list = []
-    for t in range(0, len(items), GroupNum):
-        th = Thread(target=docrawler, args=(
-            i, items[t:t + GroupNum]))
-        t_list.append(th)
-        th.start()
-    for t in t_list:
-        t.join()
-    print("page:【{}/{}】下载完成".format(i, alltotalpage))
-    time.sleep(3)
+            time.sleep(3)
+        itemindex += 1
 print("Done")

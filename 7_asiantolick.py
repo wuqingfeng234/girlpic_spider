@@ -28,7 +28,7 @@ def downloadfile(fname, furl):
     except:
         return furl+"下载失败"
 
-for i in range(38,39):
+for i in range(1,2):
     starturl=url.format(i)
     resp = requests.get(starturl, headers=headers, proxies=proxy)
     html = etree.HTML(resp.text)

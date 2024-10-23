@@ -37,7 +37,7 @@
 
    最初的单线程下载版，速度极慢。
 
-8. [6_x6o.py](https://github.com/xijiu27149/beautypiccrawler/blob/main/6_x6o.py)
+8. ~~[6_x6o.py](https://github.com/xijiu27149/beautypiccrawler/blob/main/6_x6o.py)~~
 
    网站：[数据猎人图片分区](https://www.x6o.com/)，套图质量很高，大部分是nsfw，总共600多页，但有很多图片图床失效。现在不知道为什么网站似乎关闭了，不过幸好我都爬完了。访问网站不需要科学上网，但图片在墙外，想看或下载需要科学上网。
 
@@ -45,7 +45,7 @@
 
    下载文件：239GB，48W
 
-9. [6_x6o_org.py](https://github.com/xijiu27149/beautypiccrawler/blob/main/6_x6o_org.py)
+9. ~~[6_x6o_org.py](https://github.com/xijiu27149/beautypiccrawler/blob/main/6_x6o_org.py)~~
 
    原始的单线程版
 
@@ -85,19 +85,19 @@
 
     原始的单线程版。
 
-17. [11_kanxiaojj.py](https://github.com/xijiu27149/beautypiccrawler/blob/main/11_kanxiaojj.py)
+17. ~~[11_kanxiaojj.py](https://github.com/xijiu27149/beautypiccrawler/blob/main/11_kanxiaojj.py)~~
 
     网站：[看小姐姐 – 一个专门看小姐姐的网站 ](https://www.kanxiaojiejie.com/)，SFW，图片不多，每组一般都是一张图，不需要科学上网
 
     下载文件：584MB，3400
 
-18. [12_xinggan17.py](https://github.com/xijiu27149/beautypiccrawler/blob/main/12_xinggan17.py)
+18. ~~[12_xinggan17.py](https://github.com/xijiu27149/beautypiccrawler/blob/main/12_xinggan17.py)~~
 
     网站：[美女图片（ 百万张图片更新中） 性感帝国 (xinggan17.com)](https://www.xinggan17.com/forum.php?gid=169)，免费图片板块，SFW，有33个分类，图片量很大。需要科学上网。
 
     下载文件：609GB，110w
 
-19. [12_xinggan17_org.py](https://github.com/xijiu27149/beautypiccrawler/blob/main/12_xinggan17_org.py)
+19. ~~[12_xinggan17_org.py](https://github.com/xijiu27149/beautypiccrawler/blob/main/12_xinggan17_org.py)~~
 
     原始的单线程版。
 
@@ -125,13 +125,13 @@
 
     下载文件：61GB，18W+
 
-24. [haotu555.go](https://github.com/xijiu27149/girlpic_spider/blob/main/goprj/haotu555.go)
+24. ~~[haotu555.go](https://github.com/xijiu27149/girlpic_spider/blob/main/goprj/haotu555.go)~~
 
     网站：[美女标签 - 套图分类，美女套图，美女套图网haotu555.com](https://www.haotu555.net/htm/98/)，国内套图，SFW，有几十个分类，总共4万多套，无需科学上网。尝试学习用go写爬虫。
 
     下载文件：462GB，180W+
 
-25. [haotu555_mth.go](https://github.com/xijiu27149/girlpic_spider/blob/main/goprj/haotu_mth/haotu555_mth.go)
+25. ~~[haotu555_mth.go](https://github.com/xijiu27149/girlpic_spider/blob/main/goprj/haotu_mth/haotu555_mth.go)~~
 
     多线程版
 
