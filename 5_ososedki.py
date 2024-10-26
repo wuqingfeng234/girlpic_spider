@@ -9,8 +9,8 @@ import os
 import time
 from threading import Thread
 
-picpath = "../ososedki/{}/"
-picpathtemplate = "../ososedki/{}/{}/{}"
+picpath = "./ososedki/{}/"
+picpathtemplate = "./ososedki/{}/{}/{}"
 
 # picpath="/Users/dujingwei/Movies/folder/ososedki/{}/"
 # picpathtemplate="/Users/dujingwei/Movies/folder/ososedki/{}/{}/{}"
@@ -21,8 +21,8 @@ fileformate = "{}/{}"
 url = "https://ososedki.com/top?page={}"
 suburl = "https://ososedki.com{}"
 headers = {
-    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
-    "Content-Type": "text/html;charset=UTF-8"}
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
+    "Content-Type": "text/html; charset=UTF-8"}
 proxy = {'http': 'http://127.0.0.1:7890', 'https': 'http://127.0.0.1:7890'}
 
 
@@ -118,7 +118,7 @@ def docrawler(pageindex, imgitems):
         detailpage = suburl.format(imgurl)
         subresp = requests.get(url=detailpage, headers=headers, proxies=proxy)
         subhtml = etree.HTML(subresp.text)
-        imgitems = subhtml.xpath('//div[@class="grid-item"]')
+        imgitems = subhtml.xpath('//div[@class="thumbs col col-12 col-sm-12 col-md-6 col-lg-4 p-0 m-0"]')
         imgindex = 1
         for img in imgitems:
             temp = img.xpath('a[@data-fancybox="gallery"]')
@@ -164,21 +164,22 @@ while pageindex < totalpage:
     starturl = url.format(pageindex)
     resp = requests.get(url=starturl, headers=headers, proxies=proxy)
     # print(resp.text)
-    html = etree.HTML(resp.text)
-    print(etree.tostring(html, encoding='utf-8').decode())
-    items = html.xpath('//div[@class="thumbs"]')
-    totalitems = len(items)
-    finisheditem = 0
-    # 创建多线程
-    t_list = []
-    for t in range(0, len(items), GroupNum):
-        th = Thread(target=docrawler, args=(
-            pageindex, items[t:t + GroupNum]))
-        t_list.append(th)
-        th.start()
-    for t in t_list:
-        t.join()
-    print("第{}页下载完毕".format(pageindex))
+    if resp.status_code < 300:
+        html = etree.HTML(resp.text)
+        print(etree.tostring(html, encoding='utf-8').decode())
+        items = html.xpath('//div[@class="thumbs col col-12 col-sm-12 col-md-6 col-lg-4 p-0 m-0"]')
+        totalitems = len(items)
+        finisheditem = 0
+        # 创建多线程
+        t_list = []
+        for t in range(0, len(items), GroupNum):
+            th = Thread(target=docrawler, args=(
+                pageindex, items[t:t + GroupNum]))
+            t_list.append(th)
+            th.start()
+        for t in t_list:
+            t.join()
+        print("第{}页下载完毕".format(pageindex))
     time.sleep(3)
     pageindex += 1
 print("Done")
