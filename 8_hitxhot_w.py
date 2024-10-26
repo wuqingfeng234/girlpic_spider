@@ -1,4 +1,5 @@
 import os
+from time import sleep
 
 import requests
 from lxml import etree
@@ -90,10 +91,11 @@ def downloadpic(folder, furl):
         res = requests.get(furl.split('url=')[1], headers=hs, proxies=proxy)
         with open(folder + os.path.basename(furl), 'wb') as f:
             f.write(res.content)
-            print("下载 {} 成功。".format(folder + os.path.basename(furl)))
+            print("下载 {} 成功。 url是 {} 。".format(folder + os.path.basename(furl), furl))
 
     except Exception as e:
-        print("下载 {} 失败。{}".format(folder + os.path.basename(furl), e.__cause__))
+        print("下载 {} 失败。 url是 {}。异常信息为 {}".format(folder + os.path.basename(furl), furl, e.__cause__))
+        sleep(1)
 
 
 def checkfolderexist(title):

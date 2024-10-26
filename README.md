@@ -51,7 +51,7 @@
 
 10. [7_asiantolick.py](https://github.com/xijiu27149/beautypiccrawler/blob/main/7_asiantolick.py)
 
-    网站：[Asian To Lick - Asian sexy photos and videos](https://asiantolick.com/)，NSFW，主要是国产图，量不太大，只有40页左右。这个网站下载后是压缩包，代码下载后又做了解压操作。需要科学上网。
+    网站：[Asian To Lick - Asian sexy photos and videos](https://asiantolick.com/)，NSFW，主要是国产图，量不太大，只有40页左右，很多资源不可用了。这个网站下载后是压缩包，代码下载后又做了解压操作。需要科学上网。
 
     下载文件：28GB，7.8W
 

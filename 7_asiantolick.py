@@ -5,7 +5,7 @@ import zipfile
 import time
 import operator
 
-filedic = "H:\\folder\\asiantolick\\{}\\"
+filedic = ".\\asiantolick\\{}\\"
 #filedic="/Volumes/ExtremePro/folder/asiantolick/{}/"
 url="https://asiantolick.com/ajax/buscar_posts.php?index={}"
 download = "https://asiantolick.com/ajax/download_post.php?ver=1&dir={}&post_id={}&post_name={}"
