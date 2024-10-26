@@ -4,7 +4,7 @@ import math
 import os
 import time
 
-picpath = "E:\\poco\\rayshen\\{}"
+picpath = "../poco/rayshen/{}"
 url = "http://rayshen.poco.cn/?page={}"
 headers={	"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.124 Safari/537.36 Edg/102.0.1245.44",
     "Content-Type":"text/html;charset=UTF-8"}
@@ -47,5 +47,4 @@ while pageindex<totalpage:
             if(not os.path.exists(imgname)):
                 downloadpic(imgname,imgurl)
             print("page{}_{}_{}".format(pageindex,title,imgname))
-    pageindex+=1     
-		
+    pageindex+=1

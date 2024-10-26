@@ -7,8 +7,8 @@ import time
 from threading import Thread
 from multidownload import dodownload
 
-picpath = "H:\\folder\\ososedki\\{}\\"
-picpathtemplate = "H:\\folder\\ososedki\\{}\\{}\\{}"
+picpath = "./ososedki/{}/"
+picpathtemplate = "./ososedki/{}/{}/{}"
 
 #picpath="/Users/dujingwei/Movies/folder/ososedki/{}/"
 #picpathtemplate="/Users/dujingwei/Movies/folder/ososedki/{}/{}/{}"
@@ -147,7 +147,7 @@ def docrawler(pageindex, imgitems):
 
 totalpage=4000
 
-currentpage=1275
+currentpage=1
 currentitem=10
 totalitems = 0
 finisheditem = 0
