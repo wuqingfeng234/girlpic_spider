@@ -16,3 +16,5 @@ goprj/test.go
 /goprj/test.go
 /goprj/go.sum
 *.idea/**
+*.jpg
+*.webp
