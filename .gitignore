@@ -15,3 +15,4 @@ goprj/test.go
 /goprj/.idea
 /goprj/test.go
 /goprj/go.sum
+.idea/**
