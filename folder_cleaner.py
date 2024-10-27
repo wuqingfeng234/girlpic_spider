@@ -7,12 +7,13 @@ class FolderCleaner:
         self.check_empty_folder(parent_folder)
 
     def check_empty_folder(self, parent_folder):
-        self.empty_folders.append(parent_folder)
         children = os.listdir(parent_folder)
         if len(children) > 0:
             for child in children:
                 if os.path.isdir(os.path.join(parent_folder, child)):
                     self.check_empty_folder(os.path.join(parent_folder, child))
+        else:
+            self.empty_folders.append(parent_folder)
 
     def clean_empty_folder(self):
         while len(self.empty_folders) > 0:
@@ -21,7 +22,7 @@ class FolderCleaner:
                 if os.path.exists(p):
                     os.removedirs(p)
             except Exception as e:
-                print("清理目录失败 {}", p)
+                print("清理目录失败 {}，失败原因为{} 。".format(p, e))
 
 
 if __name__ == '__main__':
