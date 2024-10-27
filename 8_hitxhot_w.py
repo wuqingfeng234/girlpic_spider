@@ -1,8 +1,11 @@
 import os
 from time import sleep
+from tkinter.font import names
 
 import requests
 from lxml import etree
+
+from folder_cleaner import FolderCleaner
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
@@ -21,9 +24,13 @@ picpath = ".\\hitxhot\\{}\\{}\\"
 # pfolder="/Volumes/ExtremePro/folder/hitxhot/"
 # picpath="/Volumes/ExtremePro/folder/hitxhot/{}/{}/"
 
-def get_people_list(start_page, end_page):
+def get_finished_topic():
+    os.listdir('C:\\Users\\12543\\Desktop\\spider\\girlpic_spider\\hitxhot')
+
+
+def get_topic_list(start_page, end_page):
     people_url = []
-    for i in range(1, 2):
+    for i in range(start_page, end_page):
         url = urltemplate.format(i)
         res = requests.get(url, headers=headers, proxies=proxy)
         if res.status_code > 300:
@@ -35,12 +42,14 @@ def get_people_list(start_page, end_page):
             titles = html.xpath(
                 '//article[@class="post type-post status-publish format-standard hentry contentme"]/header/h1/a/text()')
             for i in range(len(srcs)):
-                people_url.append((srcs[i], titles[i]))
+                exsit_title = os.listdir(os.path.join(os.getcwd(), 'hitxhot'))
+                if titles[i] not in exsit_title:
+                    people_url.append((srcs[i], titles[i]))
         print("get people url {}".format(people_url))
         return people_url
 
 
-def get_people_image_list(people_url_item):
+def download_topic_image(people_url_item):
     checkfolderexist(people_url_item[1])
     res = requests.get(base_url + people_url_item[0], headers=headers, proxies=proxy)
     html = etree.HTML(res.text)
@@ -89,7 +98,10 @@ def downloadpic(folder, furl):
             'upgrade-insecure-requests': '1',
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'}
         res = requests.get(furl.split('url=')[1], headers=hs, proxies=proxy)
-        with open(folder + os.path.basename(furl), 'wb') as f:
+        name = os.path.basename(furl)
+        if len(name) > 30:
+            name = name[-30:]
+        with open(folder + name, 'wb') as f:
             f.write(res.content)
             print("下载 {} 成功。 url是 {} 。".format(folder + os.path.basename(furl), furl))
 
@@ -106,10 +118,17 @@ def checkfolderexist(title):
 
 
 if __name__ == '__main__':
+
+    f = FolderCleaner(os.path.join(os.getcwd(), 'hitxhot'))
+    f.clean_empty_folder()
+
     total_image_urls = []
-    people_list = get_people_list(1, 200)
+    people_list = get_topic_list(1, 200)
     for item in people_list:
-        get_people_image_list(item)
+        try:
+            download_topic_image(item)
+        except ConnectionError as e:
+            print("连接失败")
     # for item in total_image_urls:
     #     for img in item:
     #         print(item)
