@@ -65,7 +65,7 @@
 
     原始的单线程版。
 
-13. [9_nsfwpicx.py](https://github.com/xijiu27149/beautypiccrawler/blob/main/9_nsfwpicx.py)
+13. ~~[9_nsfwpicx.py](https://github.com/xijiu27149/beautypiccrawler/blob/main/9_nsfwpicx.py)~~
 
     网站：[nsfwx.pics - adult pics](https://nsfwx.pics/)，图片还好，每天都有更新，目前310页。
 
