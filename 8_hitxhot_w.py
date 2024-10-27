@@ -1,4 +1,6 @@
+import datetime
 import os
+import random
 from time import sleep
 from tkinter.font import names
 
@@ -29,8 +31,9 @@ def get_finished_topic():
 
 
 def get_topic_list(start_page, end_page):
-    people_url = []
+    # people_url = []
     for i in range(start_page, end_page):
+        print('获取第{}页图片信息。'.format(i))
         url = urltemplate.format(i)
         res = requests.get(url, headers=headers, proxies=proxy)
         if res.status_code > 300:
@@ -44,34 +47,38 @@ def get_topic_list(start_page, end_page):
             for i in range(len(srcs)):
                 exsit_title = os.listdir(os.path.join(os.getcwd(), 'hitxhot'))
                 if titles[i] not in exsit_title:
-                    people_url.append((srcs[i], titles[i]))
-        print("get people url {}".format(people_url))
-    return people_url
+                    # people_url.append((srcs[i], titles[i]))
+                    print("get people url {}".format(srcs[i]))
+                    download_topic_image((srcs[i], titles[i]))
 
 
 def download_topic_image(people_url_item):
-    checkfolderexist(people_url_item[1])
-    res = requests.get(base_url + people_url_item[0], headers=headers, proxies=proxy)
-    html = etree.HTML(res.text)
-    page_info = \
-        html.xpath('//article[@class="post type-post status-publish format-standard hentry"]/header/h1/a/text()')[
-            0].split(
-            ' | Page')[1]
-    current_page = int(page_info.split('/')[0])
-    total_count = int(page_info.split('/')[1])
-    page_image_urls = html.xpath(
-        '//div[@class="entry-content"]/div/a/@href')
-    # total_image_urls.extend(page_image_urls)
-    download_pics(people_folder.format(people_url_item[1]), page_image_urls)
-    current_page = int(current_page) + 1
-    while (current_page < total_count):
-        url = base_url + people_url_item[0] + '?page={}'.format(current_page)
-        res = requests.get(url, headers=headers, proxies=proxy)
+    try:
+        checkfolderexist(people_url_item[1])
+        res = requests.get(base_url + people_url_item[0], headers=headers, proxies=proxy)
         html = etree.HTML(res.text)
+        page_info = \
+            html.xpath('//article[@class="post type-post status-publish format-standard hentry"]/header/h1/a/text()')[
+                0].split(
+                ' | Page')[1]
+        current_page = int(page_info.split('/')[0])
+        total_count = int(page_info.split('/')[1])
         page_image_urls = html.xpath(
             '//div[@class="entry-content"]/div/a/@href')
-        current_page = current_page + 1
+        # total_image_urls.extend(page_image_urls)
         download_pics(people_folder.format(people_url_item[1]), page_image_urls)
+        current_page = int(current_page) + 1
+        while current_page < total_count:
+            url = base_url + people_url_item[0] + '?page={}'.format(current_page)
+            res = requests.get(url, headers=headers, proxies=proxy)
+            html = etree.HTML(res.text)
+            page_image_urls = html.xpath(
+                '//div[@class="entry-content"]/div/a/@href')
+            current_page = current_page + 1
+            download_pics(people_folder.format(people_url_item[1]), page_image_urls)
+    except Exception as e:
+        print("发生错误{}".format(e))
+        sleep(2 * random.random())
 
 
 def download_pics(fp, urls):
@@ -98,16 +105,24 @@ def downloadpic(folder, furl):
             'upgrade-insecure-requests': '1',
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'}
         res = requests.get(furl.split('url=')[1], headers=hs, proxies=proxy)
-        name = os.path.basename(furl)
-        if len(name) > 30:
-            name = name[-30:]
-        with open(folder + name, 'wb') as f:
-            f.write(res.content)
-            print("下载 {} 成功。 url是 {} 。".format(folder + os.path.basename(furl), furl))
+        if res.status_code < 300:
+            name = os.path.basename(furl)
+            if len(name) > 30:
+                name = name[-30:]
+            with open(folder + name, 'wb') as f:
+                f.write(res.content)
+                print("{}：下载 {} 成功。 url是 {} 。".format(
+                    datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S'),
+                    folder + os.path.basename(furl), furl))
+        else:
+            print("服务器端异常，响应码为{}".format(res.status_code))
+            sleep(2 * random.random())
 
     except Exception as e:
-        print("下载 {} 失败。 url是 {}。异常信息为 {}".format(folder + os.path.basename(furl), furl, e.__cause__))
-        sleep(1)
+        print("{}：下载 {} 失败。 url是 {}。异常信息为 {}".format(
+            datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S'), folder + os.path.basename(furl),
+            furl, e))
+        sleep(2 * random.random())
 
 
 def checkfolderexist(title):
@@ -118,19 +133,14 @@ def checkfolderexist(title):
 
 
 if __name__ == '__main__':
-
-    f = FolderCleaner(os.path.join(os.getcwd(), 'hitxhot'))
-    f.clean_empty_folder()
-
-    total_image_urls = []
-    people_list = get_topic_list(1, 200)
-    for item in people_list:
+    while (True):
         try:
-            download_topic_image(item)
-        except ConnectionError as e:
-            print("下载文件连接失败")
-    # for item in total_image_urls:
-    #     for img in item:
-    #         print(item)
+            f = FolderCleaner(os.path.join(os.getcwd(), 'hitxhot'))
+            f.clean_empty_folder()
+            total_image_urls = []
+            people_list = get_topic_list(2, 200)
+        except Exception as e:
+            print("发生错误{},即将重试。".format(e))
+            sleep(50 * random.random())
     # url = 'https://i1.wp.com/img.cosxuxi.club/s5/SUlZUmlHOTZrS3VVQk9mT0ZjbWtDN3pMcEJDUjV1VStoQk55cXdacjFTYVFaekhJTHQ4NkJLV3ZJZUVMMGlUUw-d.jpg'
     # downloadpic('hitxhot\\', url)
