@@ -10,10 +10,10 @@ headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.124 Safari/537.36 Edg/102.0.1245.44",
     "Content-Type": "text/html;charset=UTF-8"}
 proxy = {'http': 'http://127.0.0.1:7890', 'https': 'http://127.0.0.1:7890'}
-urltemplate="https://hitxhot.com/hot?page={}"
+urltemplate="https://hitxhot.com/view?page={}"
 
-pfolder="./hitxhot/'"
-picpath = "./hitxhot/{}/{}/"
+pfolder=".\\hitxhot\\'"
+picpath = ".\\hitxhot\\{}\\{}\\"
 #pfolder="/Users/dujingwei/Movies/folder/hitxhot/"
 #picpath="/Users/dujingwei/Movies/folder/hitxhot/{}/{}/"
 #pfolder="/Volumes/ExtremePro/folder/hitxhot/"
@@ -69,7 +69,7 @@ def docrawler(pageindex, items):
     for item in items:
         if(pageindex < currentpage):            
             continue
-        suburl = item.xpath('div/ins/a[1]/@href')[0]
+        suburl = item.xpath('//div/img[@src]')
         suburl = "https://hitxhot.com{}".format(suburl)
         title = item.xpath('div/a[1]/text()')[0]
         if(operator.contains(title, '国模') or operator.contains(title, '台模')):
@@ -138,8 +138,8 @@ def docrawler(pageindex, items):
               totalpage, finisheditem, totalitems, title))
 
 totalpage=393
-currentpage = 387
-currentitem = 11
+currentpage = 1
+currentitem = 1
 totalitems = 0
 finisheditem = 0
 GroupNum=1
@@ -150,7 +150,7 @@ for i in range(currentpage, totalpage+1):
     htmltext=getpagehtml(starturl)  
     html = etree.HTML(htmltext)
     items = html.xpath(
-        '//div[@class="thumb-view post blish andard has-post-thumbnail hentry asian"]')
+        '//article[@class="post type-post status-publish format-standard hentry contentme"]')
     totalitems = len(items)
     finisheditem = 0
     #创建多线程

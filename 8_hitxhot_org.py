@@ -11,8 +11,8 @@ headers = {
 proxy = {'http': 'http://127.0.0.1:7890', 'https': 'http://127.0.0.1:7890'}
 urltemplate="https://hitxhot.com/hot?page={}"
 
-pfolder="H:\\folder\\hitxhot\\"
-picpath = "H:\\folder\\hitxhot\\{}\\{}\\"
+pfolder=".\\folder\\hitxhot\\"
+picpath = ".\\folder\\hitxhot\\{}\\{}\\"
 #pfolder="/Users/dujingwei/Movies/folder/hitxhot/"
 #picpath="/Users/dujingwei/Movies/folder/hitxhot/{}/{}/"
 #pfolder="/Volumes/ExtremePro/folder/hitxhot/"
