@@ -46,7 +46,7 @@ def get_topic_list(start_page, end_page):
                 if titles[i] not in exsit_title:
                     people_url.append((srcs[i], titles[i]))
         print("get people url {}".format(people_url))
-        return people_url
+    return people_url
 
 
 def download_topic_image(people_url_item):
@@ -128,7 +128,7 @@ if __name__ == '__main__':
         try:
             download_topic_image(item)
         except ConnectionError as e:
-            print("连接失败")
+            print("下载文件连接失败")
     # for item in total_image_urls:
     #     for img in item:
     #         print(item)
