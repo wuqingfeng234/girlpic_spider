@@ -29,7 +29,7 @@ def downloadpic(topic, furl):
         name = name[-30:]
     fname = os.path.join(os.getcwd() + '\\everiaclub\\' + topic, name)
     try:
-        res = requests.get(furl, headers=headers,proxies=proxy)
+        res = requests.get(furl, headers=headers, proxies=proxy)
         if res.status_code < 300:
             with open(fname, 'wb') as f:
                 f.write(res.content)
@@ -67,7 +67,7 @@ def get_topic_url(topic_page_url):
         return titles, urls
     except Exception as e:
         print("获取页面信息失败{},url为{}，".format(e, topic_page_url))
-        time.sleep(20 * random.random())
+        time.sleep(5 * random.random())
 
 
 def parse_topic_page(page_content):
@@ -92,7 +92,7 @@ def get_image_url(topic, image_page_url):
         return urls
     except Exception as e:
         print("获取图片信息失败{},url为{}，".format(e, image_page_url))
-        time.sleep(20 * random.random())
+        time.sleep(5 * random.random())
 
 
 def parse_image_urls(page_content):
@@ -130,9 +130,11 @@ if __name__ == '__main__':
                     if topics[i] not in exsit_title:
                         checkfolderexist(topics[i])
                         image_urls = get_image_url(topics[i], topic_urls[i])
-                        for image_url in image_urls:
-                            downloadpic(topics[i], image_url)
+                        for t in range(0, len(image_urls)):
+                            th = Thread(target=downloadpic, args=(
+                                topics[i], image_urls[t]))
+                            th.start()
         except Exception as e:
             print("发生错误{},即将重试。".format(e))
-            time.sleep(50 * random.random())
+            time.sleep(10 * random.random())
     # downloadpic("1", 'https://nekobox.top/wp-content/uploads/2024/10/ONLINANA3_2.jpg')
