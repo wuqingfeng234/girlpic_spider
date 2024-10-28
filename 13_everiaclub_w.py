@@ -114,7 +114,7 @@ def get_page_url(page_index):
 
 
 if __name__ == '__main__':
-    start_page = 1
+    start_page = 24
     end_page = 1000
     while True:
         try:
