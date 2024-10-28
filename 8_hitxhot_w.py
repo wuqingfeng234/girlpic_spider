@@ -62,14 +62,14 @@ def download_topic_image(people_url_item):
         sleep(2 * random.random())
 
 
-def download_pics(fp, urls):
+def download_pics(tf, urls):
     for url in urls:
         th = Thread(target=downloadpic, args=(
-            fp, url))
+            tf, url))
         th.start()
 
 
-def downloadpic(folder, furl):
+def downloadpic(tf, furl):
     try:
         hs = {
             'dnt': '1',
@@ -92,18 +92,19 @@ def downloadpic(folder, furl):
             name = os.path.basename(furl)
             if len(name) > 30:
                 name = name[-30:]
-            with open(folder + name, 'wb') as f:
+            fname = os.path.join(os.getcwd(), pfolder_name, tf, name)
+            with open(fname, 'wb') as f:
                 f.write(res.content)
                 print("{}：下载 {} 成功。 url是 {} 。".format(
                     datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S'),
-                    folder + os.path.basename(furl), furl))
+                    tf + os.path.basename(furl), furl))
         else:
             print("服务器端异常，响应码为{}".format(res.status_code))
             sleep(2 * random.random())
 
     except Exception as e:
         print("{}：下载 {} 失败。 url是 {}。异常信息为 {}".format(
-            datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S'), folder + os.path.basename(furl),
+            datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S'), tf + os.path.basename(furl),
             furl, e))
         sleep(2 * random.random())
 
