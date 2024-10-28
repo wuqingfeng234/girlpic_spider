@@ -118,7 +118,7 @@ if __name__ == '__main__':
     while True:
         try:
             pf = os.path.join(os.getcwd(), pfolder_name)
-            if os.path.exists(pf):
+            if not os.path.exists(pf):
                 os.mkdir(pf)
             f = FolderCleaner(pf)
             f.clean_empty_folder()
