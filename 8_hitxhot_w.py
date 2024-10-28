@@ -3,7 +3,6 @@ import os
 import random
 from threading import Thread
 from time import sleep
-from tkinter.font import names
 
 import requests
 from lxml import etree
@@ -17,18 +16,7 @@ proxy = {'http': 'http://127.0.0.1:7890', 'https': 'http://127.0.0.1:7890'}
 base_url = 'https://hitxhot.com/'
 urltemplate = "https://hitxhot.com/view?page={}"
 
-pfolder = ".\\hitxhot\\'"
-people_folder = ".\\hitxhot\\{}\\"
-picpath = ".\\hitxhot\\{}\\{}\\"
-
-
-# pfolder="/Users/dujingwei/Movies/folder/hitxhot/"
-# picpath="/Users/dujingwei/Movies/folder/hitxhot/{}/{}/"
-# pfolder="/Volumes/ExtremePro/folder/hitxhot/"
-# picpath="/Volumes/ExtremePro/folder/hitxhot/{}/{}/"
-
-def get_finished_topic():
-    os.listdir('C:\\Users\\12543\\Desktop\\spider\\girlpic_spider\\hitxhot')
+pfolder_name = "hitxhot"
 
 
 def get_topic_list(page_index):
@@ -43,6 +31,7 @@ def get_topic_list(page_index):
             '//article[@class="post type-post status-publish format-standard hentry contentme"]/header/h1/a/text()')
         return titles, srcs
 
+
 def download_topic_image(people_url_item):
     try:
         checkfolderexist(people_url_item[1])
@@ -56,8 +45,8 @@ def download_topic_image(people_url_item):
         total_count = int(page_info.split('/')[1])
         page_image_urls = html.xpath(
             '//div[@class="entry-content"]/div/a/@href')
-        # total_image_urls.extend(page_image_urls)
-        download_pics(people_folder.format(people_url_item[1]), page_image_urls)
+        tf = os.path.join(os.getcwd(), pfolder_name, people_url_item[1])
+        download_pics(tf, page_image_urls)
         current_page = int(current_page) + 1
         while current_page < total_count:
             url = base_url + people_url_item[0] + '?page={}'.format(current_page)
@@ -66,7 +55,8 @@ def download_topic_image(people_url_item):
             page_image_urls = html.xpath(
                 '//div[@class="entry-content"]/div/a/@href')
             current_page = current_page + 1
-            download_pics(people_folder.format(people_url_item[1]), page_image_urls)
+            tf = os.path.join(os.getcwd(), pfolder_name, people_url_item[1])
+            download_pics(tf, page_image_urls)
     except Exception as e:
         print("发生错误{}".format(e))
         sleep(2 * random.random())
@@ -119,10 +109,12 @@ def downloadpic(folder, furl):
 
 
 def checkfolderexist(title):
-    if not os.path.exists(pfolder):
-        os.mkdir(pfolder)
-    if not os.path.exists(people_folder.format(title)):
-        os.mkdir(people_folder.format(title))
+    pf = os.path.join(os.getcwd(), pfolder_name)
+    if not os.path.exists(pf):
+        os.mkdir(pf)
+    tf = os.path.join(os.getcwd(), pfolder_name, title)
+    if not os.path.exists(tf):
+        os.mkdir(tf)
 
 
 if __name__ == '__main__':
