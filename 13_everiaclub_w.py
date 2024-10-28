@@ -117,13 +117,13 @@ if __name__ == '__main__':
     end_page = 1000
     while True:
         try:
-            f = FolderCleaner(os.path.join(os.getcwd(), 'everiaclub'))
+            f = FolderCleaner(os.path.join(os.getcwd(), pfolder_name))
             f.clean_empty_folder()
             for i in range(start_page, end_page):
                 topic_page_url = get_page_url(i)
                 topics, topic_urls = get_topic_url(topic_page_url)
                 for i in range(len(topic_urls)):
-                    exsit_title = os.listdir(os.path.join(os.getcwd(), 'everiaclub'))
+                    exsit_title = os.listdir(os.path.join(os.getcwd(), pfolder_name))
                     if topics[i] not in exsit_title:
                         checkfolderexist(topics[i])
                         image_urls = get_image_url(topics[i], topic_urls[i])

@@ -2,9 +2,10 @@ import os.path
 
 
 class FolderCleaner:
-    def __init__(self, parent_folder):
+    def __init__(self, root_folder):
+        self.root_folder = root_folder
         self.empty_folders = []
-        self.check_empty_folder(parent_folder)
+        self.check_empty_folder(root_folder)
 
     def check_empty_folder(self, parent_folder):
         children = os.listdir(parent_folder)
@@ -13,7 +14,8 @@ class FolderCleaner:
                 if os.path.isdir(os.path.join(parent_folder, child)):
                     self.check_empty_folder(os.path.join(parent_folder, child))
         else:
-            self.empty_folders.append(parent_folder)
+            if parent_folder != parent_folder:
+                self.empty_folders.append(parent_folder)
 
     def clean_empty_folder(self):
         while len(self.empty_folders) > 0:
