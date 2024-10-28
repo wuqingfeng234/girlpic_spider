@@ -120,6 +120,9 @@ def checkfolderexist(title):
 if __name__ == '__main__':
     while (True):
         try:
+            pf = os.path.join(os.getcwd(), pfolder_name)
+            if not os.path.exists(pf):
+                os.mkdir(pf)
             f = FolderCleaner(os.path.join(os.getcwd(), 'hitxhot'))
             f.clean_empty_folder()
             start_page = 1
