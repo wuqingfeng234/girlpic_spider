@@ -1,16 +1,11 @@
 import datetime
-import random
-from ast import operator
-from pydoc_data.topics import topics
-from xml.sax.saxutils import escape
-
-from numpy import tile
-import requests
-import time
 import os
-from lxml import etree
+import random
+import time
 from threading import Thread
-import operator
+
+import requests
+from lxml import etree
 
 from folder_cleaner import FolderCleaner
 
@@ -19,15 +14,15 @@ headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
     "Content-Type": "text/html;charset=UTF-8"}
 proxy = {'http': 'http://127.0.0.1:7890', 'https': 'http://127.0.0.1:7890'}
-topic_folder = ".\\everiaclub\\{}\\"
-pfolder = ".\\everiaclub\\"
+
+pfolder_name = "everiaclub"
 
 
 def downloadpic(topic, furl):
     name = os.path.basename(furl)
     if len(name) > 30:
         name = name[-30:]
-    fname = os.path.join(os.getcwd() + '\\everiaclub\\' + topic, name)
+    fname = os.path.join(os.getcwd(), pfolder_name, topic, name)
     try:
         res = requests.get(furl, headers=headers, proxies=proxy)
         if res.status_code < 300:
@@ -47,10 +42,12 @@ def downloadpic(topic, furl):
 
 
 def checkfolderexist(topic):
-    if not os.path.exists(pfolder):
-        os.mkdir(pfolder)
-    if not os.path.exists(topic_folder.format(topic)):
-        os.mkdir(topic_folder.format(topic))
+    pf = os.path.join(os.getcwd(), pfolder_name)
+    if not os.path.exists(pf):
+        os.mkdir(pf)
+    tf = os.path.join(os.getcwd(), pfolder_name, topic)
+    if not os.path.exists(tf):
+        os.mkdir(tf)
 
 
 def get_topic_url(topic_page_url):
@@ -120,7 +117,7 @@ if __name__ == '__main__':
     end_page = 1000
     while True:
         try:
-            f = FolderCleaner(os.path.join(os.getcwd(), 'everiaclub\\'))
+            f = FolderCleaner(os.path.join(os.getcwd(), 'everiaclub'))
             f.clean_empty_folder()
             for i in range(start_page, end_page):
                 topic_page_url = get_page_url(i)
