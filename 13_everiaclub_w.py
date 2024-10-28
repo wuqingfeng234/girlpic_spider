@@ -106,6 +106,7 @@ def parse_image_urls(page_content):
 
 
 def get_page_url(page_index):
+    print("开始获取第{}页topic url。".format(i))
     if page_index == 1:
         return 'https://everia.club'
     else:
@@ -137,4 +138,3 @@ if __name__ == '__main__':
         except Exception as e:
             print("发生错误{},即将重试。".format(e))
             time.sleep(10 * random.random())
-    # downloadpic("1", 'https://nekobox.top/wp-content/uploads/2024/10/ONLINANA3_2.jpg')
