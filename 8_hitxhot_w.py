@@ -1,6 +1,7 @@
 import datetime
 import os
 import random
+from threading import Thread
 from time import sleep
 from tkinter.font import names
 
@@ -30,27 +31,17 @@ def get_finished_topic():
     os.listdir('C:\\Users\\12543\\Desktop\\spider\\girlpic_spider\\hitxhot')
 
 
-def get_topic_list(start_page, end_page):
-    # people_url = []
-    for i in range(start_page, end_page):
-        print('获取第{}页图片信息。'.format(i))
-        url = urltemplate.format(i)
-        res = requests.get(url, headers=headers, proxies=proxy)
-        if res.status_code > 300:
-            break
-        else:
-            html = etree.HTML(res.text)
-            srcs = html.xpath(
-                '//article[@class="post type-post status-publish format-standard hentry contentme"]/header/h1/a/@href')
-            titles = html.xpath(
-                '//article[@class="post type-post status-publish format-standard hentry contentme"]/header/h1/a/text()')
-            for i in range(len(srcs)):
-                exsit_title = os.listdir(os.path.join(os.getcwd(), 'hitxhot'))
-                if titles[i] not in exsit_title:
-                    # people_url.append((srcs[i], titles[i]))
-                    print("get people url {}".format(srcs[i]))
-                    download_topic_image((srcs[i], titles[i]))
-
+def get_topic_list(page_index):
+    print('获取第{}页图片信息。'.format(page_index))
+    url = urltemplate.format(page_index)
+    res = requests.get(url, headers=headers, proxies=proxy)
+    if res.status_code < 300:
+        html = etree.HTML(res.text)
+        srcs = html.xpath(
+            '//article[@class="post type-post status-publish format-standard hentry contentme"]/header/h1/a/@href')
+        titles = html.xpath(
+            '//article[@class="post type-post status-publish format-standard hentry contentme"]/header/h1/a/text()')
+        return titles, srcs
 
 def download_topic_image(people_url_item):
     try:
@@ -83,7 +74,9 @@ def download_topic_image(people_url_item):
 
 def download_pics(fp, urls):
     for url in urls:
-        downloadpic(fp, url)
+        th = Thread(target=downloadpic, args=(
+            fp, url))
+        th.start()
 
 
 def downloadpic(folder, furl):
@@ -137,8 +130,15 @@ if __name__ == '__main__':
         try:
             f = FolderCleaner(os.path.join(os.getcwd(), 'hitxhot'))
             f.clean_empty_folder()
-            total_image_urls = []
-            people_list = get_topic_list(2, 200)
+            start_page = 1
+            end_page = 200
+            for i in range(start_page, end_page):
+                titles, topic_srcs = get_topic_list(i)
+                for i in range(len(topic_srcs)):
+                    exsit_title = os.listdir(os.path.join(os.getcwd(), 'hitxhot'))
+                    if titles[i] not in exsit_title:
+                        print("get people url {}".format(topic_srcs[i]))
+                        download_topic_image((topic_srcs[i], titles[i]))
         except Exception as e:
             print("发生错误{},即将重试。".format(e))
             sleep(50 * random.random())
