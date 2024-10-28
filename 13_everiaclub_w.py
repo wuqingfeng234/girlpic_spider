@@ -117,7 +117,10 @@ if __name__ == '__main__':
     end_page = 1000
     while True:
         try:
-            f = FolderCleaner(os.path.join(os.getcwd(), pfolder_name))
+            pf = os.path.join(os.getcwd(), pfolder_name)
+            if os.path.exists(pf):
+                os.mkdir(pf)
+            f = FolderCleaner(pf)
             f.clean_empty_folder()
             for i in range(start_page, end_page):
                 topic_page_url = get_page_url(i)
