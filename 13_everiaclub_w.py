@@ -32,7 +32,7 @@ def downloadpic(topic, furl):
                     datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S'),
                     topic + os.path.basename(furl), furl))
         else:
-            print("{}服务器端异常，响应码为{}".format(
+            print("{}：服务器端异常，响应码为{}".format(
                 datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S'), res.status_code))
             time.sleep(2 * random.random())
     except Exception as e:
@@ -59,14 +59,14 @@ def get_topic_url(topic_page_url):
         if resp.status_code < 300:
             titles, urls = parse_topic_page(resp.content)
             if len(urls) == 0:
-                print("{}当前页面未找到有效topic信息，url为{}".format(
+                print("{}：当前页面未找到有效topic信息，url为{}".format(
                     datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S'), topic_page_url))
         else:
-            print("{}获取page url请求服务器异常，异常码为{}".format(
+            print("{}：获取page url请求服务器异常，异常码为{}".format(
                 datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S'), resp.status_code))
         return titles, urls
     except Exception as e:
-        print("{}获取页面信息失败{},url为{}，".format(
+        print("{}：获取页面信息失败{},url为{}，".format(
             datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S'), e, topic_page_url))
         time.sleep(5 * random.random())
 
@@ -87,14 +87,14 @@ def get_image_url(topic, image_page_url):
             if len(urls) > 0:
                 checkfolderexist(topic)
             else:
-                print("{}当前页面未找到有效图片链接信息，url为{}".format(
+                print("{}：当前页面未找到有效图片链接信息，url为{}".format(
                     datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S'), image_page_url))
         else:
-            print("{}获取图片url请求服务器异常，异常码为{}".format(
+            print("{}：获取图片url请求服务器异常，异常码为{}".format(
                 datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S'), resp.status_code))
         return urls
     except Exception as e:
-        print("{}获取图片信息失败{},url为{}，".format(
+        print("{}：获取图片信息失败{},url为{}，".format(
             datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S'), e, image_page_url))
         time.sleep(5 * random.random())
 
@@ -113,8 +113,8 @@ def parse_image_urls(page_content):
 
 
 def get_page_url(page_index):
-    print("{}开始获取第{}页topic url。".format(datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S'),
-                                              i))
+    print("{}：开始获取第{}页topic url。".format(datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S'),
+                                               i))
     if page_index == 1:
         return 'https://everia.club'
     else:
@@ -144,6 +144,6 @@ if __name__ == '__main__':
                                 topics[i], image_urls[t]))
                             th.start()
         except Exception as e:
-            print("{}发生错误{},即将重试。".format(
+            print("{}：发生错误{},即将重试。".format(
                 datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S'), e))
             time.sleep(10 * random.random())
