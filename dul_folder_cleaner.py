@@ -49,6 +49,6 @@ class DulFolderCoordinator:
 
 if __name__ == '__main__':
     coordinator = DulFolderCoordinator()
-    # get_exsiting_folder()
+    coordinator.get_exsiting_folder()
     # list = clean_exsiting_folder()
     # print(len(list))
