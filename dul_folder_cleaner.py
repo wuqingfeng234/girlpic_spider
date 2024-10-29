@@ -17,13 +17,13 @@ def clean_exsiting_folder():
     f = open("k.txt", "r", encoding='utf-8')
     list = f.readlines()
     for item in list:
-        if item in server_folders:
+        if item.replace('\n', '') in server_folders:
             print(item)
             # shutil.rmtree(os.path.join(server_path, item))
     return list
 
 
 if __name__ == '__main__':
-    get_exsiting_folder()
+    # get_exsiting_folder()
     list = clean_exsiting_folder()
     print(len(list))
