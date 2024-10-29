@@ -26,7 +26,6 @@ class FolderCleaner:
             except Exception as e:
                 print("清理目录失败 {}，失败原因为{} 。".format(p, e))
 
-
 if __name__ == '__main__':
     f = FolderCleaner('C:\\Users\\12543\\Desktop\\spider\\girlpic_spider\\hitxhot')
     f.clean_empty_folder()
