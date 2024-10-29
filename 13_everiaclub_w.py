@@ -7,6 +7,7 @@ from threading import Thread
 import requests
 from lxml import etree
 
+from dul_folder_cleaner import DulFolderCoordinator
 from folder_cleaner import FolderCleaner
 
 urltemplate = "https://everia.club/page/{}"
@@ -21,8 +22,8 @@ pfolder_name = "everiaclub"
 def downloadpic(topic, furl):
     name = os.path.basename(furl)
     if len(name) > 30:
-        name = name[-30:].replace('/','')
-    fname = os.path.join(os.getcwd(), pfolder_name, topic.replace('/',''), name)
+        name = name[-30:].replace('/', '')
+    fname = os.path.join(os.getcwd(), pfolder_name, topic.replace('/', ''), name)
     try:
         res = requests.get(furl, headers=headers, proxies=proxy)
         if res.status_code < 300:
@@ -46,7 +47,7 @@ def checkfolderexist(topic):
     pf = os.path.join(os.getcwd(), pfolder_name)
     if not os.path.exists(pf):
         os.mkdir(pf)
-    tf = os.path.join(os.getcwd(), pfolder_name, topic.replace('/',''))
+    tf = os.path.join(os.getcwd(), pfolder_name, topic.replace('/', ''))
     if not os.path.exists(tf):
         os.mkdir(tf)
 
@@ -131,11 +132,14 @@ if __name__ == '__main__':
                 os.mkdir(pf)
             f = FolderCleaner(pf)
             f.clean_empty_folder()
+            coordinator = DulFolderCoordinator()
+            opposite_tities = coordinator.get_exsiting_folder()
             for i in range(start_page, end_page):
                 topic_page_url = get_page_url(i)
                 topics, topic_urls = get_topic_url(topic_page_url)
                 for i in range(len(topic_urls)):
                     exsit_title = os.listdir(os.path.join(os.getcwd(), pfolder_name))
+                    exsit_title.extend(opposite_tities)
                     if topics[i] not in exsit_title:
                         checkfolderexist(topics[i])
                         image_urls = get_image_url(topics[i], topic_urls[i])
