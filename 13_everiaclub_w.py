@@ -21,8 +21,8 @@ pfolder_name = "everiaclub"
 def downloadpic(topic, furl):
     name = os.path.basename(furl)
     if len(name) > 30:
-        name = name[-30:]
-    fname = os.path.join(os.getcwd(), pfolder_name, topic, name)
+        name = name[-30:].replace('/','')
+    fname = os.path.join(os.getcwd(), pfolder_name, topic.replace('/',''), name)
     try:
         res = requests.get(furl, headers=headers, proxies=proxy)
         if res.status_code < 300:
@@ -46,7 +46,7 @@ def checkfolderexist(topic):
     pf = os.path.join(os.getcwd(), pfolder_name)
     if not os.path.exists(pf):
         os.mkdir(pf)
-    tf = os.path.join(os.getcwd(), pfolder_name, topic)
+    tf = os.path.join(os.getcwd(), pfolder_name, topic.replace('/',''))
     if not os.path.exists(tf):
         os.mkdir(tf)
 
