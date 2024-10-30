@@ -7,7 +7,8 @@ from threading import Thread
 import requests
 from lxml import etree
 
-from dul_folder_cleaner import DulFolderCoordinator
+from dul_folder_coordinator import DulFolderCoordinator
+
 from folder_cleaner import FolderCleaner
 
 urltemplate = "https://everia.club/page/{}"
