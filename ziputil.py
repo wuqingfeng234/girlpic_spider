@@ -64,7 +64,7 @@ if __name__ == '__main__':
     ziped_list = []
     for i in range(len(list)):
         name = str(name_count) + '.zip'
-        if os.path.exists(name) and os.path.getsize(name) > 1.5 :
+        if os.path.exists(name) and os.path.getsize(name) > 1.5 * 1024 * 1024 * 1024:
             z.remove_zipped_dir(ziped_list)
             name_count = name_count + 1
             name = str(name_count) + '.zip'
