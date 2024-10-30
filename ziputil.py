@@ -50,6 +50,7 @@ class ZipUtil:
     def remove_zipped_dir(self, zipped_dirs):
         if zipped_dirs != EMPTY_LIST:
             for item in zipped_dirs:
+                # print("delete zipped folder {} .".format(os.path.join(os.getcwd(), folder_name, item)))
                 shutil.rmtree(os.path.join(os.getcwd(), folder_name, item))
         zipped_dirs.clear()
 
@@ -63,7 +64,7 @@ if __name__ == '__main__':
     ziped_list = []
     for i in range(len(list)):
         name = str(name_count) + '.zip'
-        if os.path.exists(name) and os.path.getsize(name) > 1.5 * 1024 * 1024 * 1024:
+        if os.path.exists(name) and os.path.getsize(name) > 1.5 :
             z.remove_zipped_dir(ziped_list)
             name_count = name_count + 1
             name = str(name_count) + '.zip'
