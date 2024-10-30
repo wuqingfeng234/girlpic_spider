@@ -70,5 +70,6 @@ if __name__ == '__main__':
             name = str(name_count) + '.zip'
         z.zip_dir(dir_i=os.path.join(os.getcwd(), folder_name, list[i]), file_o=name)
         ziped_list.append(list[i])
+    z.remove_zipped_dir(ziped_list)
 
     print(list)
