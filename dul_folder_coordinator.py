@@ -19,13 +19,13 @@ class DulFolderCoordinator:
         f.close()
 
     def get_exsiting_folder(self):
-        pf = platform.architecture()
-        if pf[1] == 'WindowsPE':
-            filename = 'server.txt'
-        else:
-            filename = 'office.txt'
-        f = open(filename, "r", encoding='utf-8')
-        list = f.readlines()
+        server_file = 'server.txt'
+        with open(server_file, "r", encoding='utf-8') as sf:
+            list = sf.readlines()
+        office_file = 'office.txt'
+        with open(office_file, "r", encoding='utf-8') as of:
+            ol=of.readlines()
+            list.extend(ol)
         return list
 
     def clean_exsiting_folder(self, filename):
@@ -49,6 +49,6 @@ class DulFolderCoordinator:
 
 if __name__ == '__main__':
     coordinator = DulFolderCoordinator()
-    coordinator.set_exsiting_folder()
+    # coordinator.set_exsiting_folder()
     list = coordinator.get_exsiting_folder()
     print(len(list))
