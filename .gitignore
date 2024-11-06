@@ -22,3 +22,6 @@ everiaclub
 girlpic_spider/
 nohup.out
 *.zip
+*.log
+*.bak
+spider/
